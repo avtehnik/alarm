@@ -1,0 +1,14 @@
+parameters:
+    a_vtehik_alarm.alarms_path: ''
+
+services:
+    a_vtehik_alarm.alarm_manager:
+        class: AVtehik\AlarmBundle\Services\AlarmManager
+        arguments: [%a_vtehik_alarm.alarms_path%]
+
+    a_vtehik_alarm.command.executor:
+        class: AVtehik\AlarmBundle\Command\ExecutorCommand
+        arguments: [ @a_vtehik_alarm.alarm_manager ]
+
+        tags:
+           - { name: console.command }

@@ -1,0 +1,5 @@
+a_vtehik_alarm:
+    resource: "@AVtehikAlarmBundle/Controller/"
+    type:     annotation
+    prefix:   /
+

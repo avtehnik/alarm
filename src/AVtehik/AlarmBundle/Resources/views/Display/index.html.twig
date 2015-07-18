@@ -1,0 +1,22 @@
+<table>
+    <tr>
+        <td>getTimeString</td>
+        <td>getDaysString</td>
+        <td>getOnceString</td>
+        <td>getLongString</td>
+        <td>getEnabledString</td>
+        <td>getTask</td>
+        <td></td>
+    </tr>
+    {% for key, alarm in alarms %}
+        <tr>
+            <td>{{ alarm.getTimeString }}</td>
+            <td>{{ alarm.getDaysString }}</td>
+            <td>{{ alarm.getOnceString }}</td>
+            <td>{{ alarm.getLongString }}</td>
+            <td>{{ alarm.getEnabledString }}</td>
+            <td>{{ alarm.getTask }}</td>
+            <td><a href="{{ path('edit_alarm',{'id':alarm.name}) }}">Edit</a></td>
+        </tr>
+    {% endfor %}
+</table>
