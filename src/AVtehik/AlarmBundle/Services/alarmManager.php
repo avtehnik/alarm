@@ -4,21 +4,24 @@
 namespace AVtehik\AlarmBundle\Services;
 
 use AVtehik\AlarmBundle\Entity\Alarm;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class AlarmManager
 {
 
-    var $alarmsFolder = null;
+    private $alarmsFolder = null;
+    private $currentDate;
+    const FILE_EXENSION = '.alarm';
 
     public function __construct($folder = null)
     {
-        if ($folder) {
-            $this->alarmsFolder = $folder;
-        } else {
-            $this->alarmsFolder = __DIR__ . DIRECTORY_SEPARATOR . 'alarms';
-        }
+        $this->alarmsFolder = $folder;
+        $this->currentDate = new DateTime();
     }
 
+    /**
+     * @return Alarm[]
+     */
     public function getAlarms()
     {
 
@@ -31,32 +34,64 @@ class AlarmManager
                 continue;
             }
 
-            $alarm = Alarm::restore($this->alarmsFolder . '/' . $file);
-            $alarm->setName($file);
-
-            $alarms[] = $alarm;
+            $id =  str_replace(self::FILE_EXENSION,'',$file);
+            $alarm = $this->getAlarm($id);
+            $alarms[$id] = $alarm;
         }
 
         return $alarms;
     }
 
+    /**
+     * @param Alarm $alarm
+     *
+     * @return string alarm file name
+     */
     public function saveAlarm(Alarm $alarm)
     {
-        $alarm->store($this->alarmsFolder);
+       return file_put_contents($this->fileName(time()), serialize($alarm));
     }
 
+    /**
+     * @param $id
+     *
+     * @return Alarm
+     */
     public function getAlarm($id)
     {
-        $alarm = Alarm::restore($this->alarmsFolder . '/' . $id . Alarm::FILE_EXENSION);
-        $alarm->setName($id);
+        $alarm = unserialize(file_get_contents($this->fileName($id)));
         return $alarm;
     }
 
     public function deleteAlarm($id)
     {
-       return unlink($this->alarmsFolder . '/' . $id . Alarm::FILE_EXENSION);
+        return unlink($this->fileName($id));
     }
 
+
+
+    public function check( Alarm $alarm)
+    {
+        if ($alarm->getEnabled() && ($this->currentDate->format('H:i') == $this->getTime()->format('H:i'))) {
+            if (count($alarm->getDays()) && !in_array($this->currentDate->format('D'), $alarm->getDays())) {
+                return false;
+            } else {
+                if ($alarm->getRepeat()) {
+                    $alarm->setEnabled(false);
+                    $this->saveAlarm($alarm);
+                }
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
+    private function fileName($id){
+        return $this->alarmsFolder . '/' . $id . self::FILE_EXENSION;
+    }
 
 }
 

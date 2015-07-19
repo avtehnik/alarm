@@ -48,8 +48,8 @@ class ExecutorCommand extends Command
     {
         $alarms = $this->alarmManager->getAlarms();
         foreach ($alarms as $alarm) {
-            if($alarm->check()){
-                exec($alarm->getTask());
+            if($this->alarmManager->check($alarm)){
+                exec($alarm->getAction());
             }
         }
 

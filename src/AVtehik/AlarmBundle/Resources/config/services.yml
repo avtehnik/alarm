@@ -12,3 +12,7 @@ services:
 
         tags:
            - { name: console.command }
+    a_vtehik_alarm.twig.alarm_extension:
+        class: AVtehik\AlarmBundle\Twig\AlarmBundleExtension
+        tags:
+            - { name: twig.extension }

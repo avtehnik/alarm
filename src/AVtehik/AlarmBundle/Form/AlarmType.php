@@ -16,32 +16,39 @@ class AlarmType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
-//
+//osascript -e 'display notification "Lorem ipsum dolor sit amet" with title "Title"'
         $builder
-            ->add('time', 'datetime')
+            ->add('time', 'time', ['label' => 'Час'])
+            ->add('name', 'text', ['label' => 'Назва'])
             ->add('days', 'choice', [
-                'multiple'=>true,
-                'choices' => [
-                    Alarm::FRI => 'Fri',
-                    Alarm::MON => 'MON',
-                    Alarm::SAT => 'SAT',
-                    Alarm::SUN => 'SUN',
-                    Alarm::THU => 'THU',
-                    Alarm::TUE => 'TUE',
-                    Alarm::WED => 'WED'
+                'label'    => 'Дні',
+                'multiple' => true,
+                'required' => false,
+                'expanded' => true,
+                'choices'  => [
+                    Alarm::MON => 'Понеділок',
+                    Alarm::TUE => 'Вівторок',
+                    Alarm::WED => 'Середа',
+                    Alarm::THU => 'Четвер',
+                    Alarm::FRI => 'Пятниця',
+                    Alarm::SAT => 'Субота',
+                    Alarm::SUN => 'Неділя'
                 ]
             ])
-            ->add('runOnce', 'choice', [
-                'choices' => [true=>'yes', false=>'no']
+            ->add('repeat', 'choice', [
+                'expanded' => true,
+                'label'    => 'Повтор',
+                'choices'  => [true => 'Так', false => 'Ні']
             ])
             ->add('long', 'choice', [
-                'choices' => [true=>'yes', false=>'no']
+                'expanded' => true,
+                'choices'  => [true => 'Так', false => 'Ні']
             ])
             ->add('enabled', 'choice', [
-                'choices' => [true=>'yes', false=>'no']
+                'expanded' => true,
+                'choices'  => [true => 'Так', false => 'Ні']
             ])
-            ->add('task')
-        ;
+            ->add('action');
     }
 
     /**
@@ -61,11 +68,4 @@ class AlarmType extends AbstractType
     {
         return 'appshed_slidebundle_hint';
     }
-
-//$this->time = $time;
-//$this->days = $days;
-//$this->runOnce = $once;
-//$this->long = $long;
-
-
 }

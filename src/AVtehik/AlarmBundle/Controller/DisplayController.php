@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 
 class DisplayController extends Controller
@@ -30,7 +31,11 @@ class DisplayController extends Controller
     public function addAction()
     {
         $alarm  = new Alarm();
-        $form   = $this->createForm(new AlarmType(), $alarm);
+        $alarm->setTime(new \DateTime());
+        $form  = $this->createForm(new AlarmType(), $alarm, [
+            'action' => $this->generateUrl('save_alarm', ['id' => 'new']),
+            'method' => 'POST',
+        ]);
         return ['form' => $form->createView()];
     }
 
@@ -47,6 +52,7 @@ class DisplayController extends Controller
         ]);
         return ['form' => $form->createView(), 'deleteForm'=>$this->createDeleteForm($id)];
     }
+
 
     /**
      * @Route("/save/{id}", name="save_alarm")
