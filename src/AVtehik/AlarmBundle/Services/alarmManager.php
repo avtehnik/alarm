@@ -16,7 +16,7 @@ class AlarmManager
     public function __construct($folder = null)
     {
         $this->alarmsFolder = $folder;
-        $this->currentDate = new DateTime();
+        $this->currentDate = new \DateTime();
     }
 
     /**
@@ -72,7 +72,7 @@ class AlarmManager
 
     public function check( Alarm $alarm)
     {
-        if ($alarm->getEnabled() && ($this->currentDate->format('H:i') == $this->getTime()->format('H:i'))) {
+        if ($alarm->getEnabled() && ($this->currentDate->format('H:i') == $alarm->getTime()->format('H:i'))) {
             if (count($alarm->getDays()) && !in_array($this->currentDate->format('D'), $alarm->getDays())) {
                 return false;
             } else {
