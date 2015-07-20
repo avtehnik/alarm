@@ -57,13 +57,7 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-nelmio_cors:
-    paths:
-        '^/(write|read|api)':
-            allow_origin: ['*']
-            allow_headers: ['*']
-            allow_methods: ['POST', 'GET']
-            max_age: 3600
+
 
 a_vtehik_alarm:
-    alarms_path: '/Users/vitaliy/work/home/alarm/alarms'
+    alarms_path: "%alarms_path%"

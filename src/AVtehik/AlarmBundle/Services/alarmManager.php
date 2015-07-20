@@ -36,7 +36,7 @@ class AlarmManager
 
             $id =  str_replace(self::FILE_EXENSION,'',$file);
             $alarm = $this->getAlarm($id);
-            $alarms[$id] = $alarm;
+            $alarms[] = $alarm;
         }
 
         return $alarms;
@@ -47,9 +47,9 @@ class AlarmManager
      *
      * @return string alarm file name
      */
-    public function saveAlarm(Alarm $alarm)
+    public function saveAlarm(Alarm $alarm, $id)
     {
-       return file_put_contents($this->fileName(time()), serialize($alarm));
+       return file_put_contents($this->fileName($id), serialize($alarm));
     }
 
     /**
@@ -59,7 +59,12 @@ class AlarmManager
      */
     public function getAlarm($id)
     {
+
+        /**
+         * @var Alarm $alarm
+         */
         $alarm = unserialize(file_get_contents($this->fileName($id)));
+        $alarm->setId($id);
         return $alarm;
     }
 

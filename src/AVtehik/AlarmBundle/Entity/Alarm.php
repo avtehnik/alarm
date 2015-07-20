@@ -14,6 +14,7 @@ class Alarm implements \JsonSerializable
     const FRI = 'Fri';
     const SAT = 'Sat';
 
+    private $id;
     private $time = null;
     private $days = [];
     private $repeat = false;
@@ -22,14 +23,44 @@ class Alarm implements \JsonSerializable
     private $name = null;
     private $action = null;
 
-    public function getEnabled()
+    /**
+     * @return mixed
+     */
+    public function getId()
     {
-        return $this->enabled;
+        return $this->id;
     }
 
-    public function setEnabled($enabled)
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
     {
-        $this->enabled = $enabled;
+        $this->id = $id;
+    }
+
+    public function jsonSerialize()
+    {
+        return array(
+            'id'=> $this->getId(),
+            'name'       => $this->getName(),
+            'time'     => $this->getTime()->format('H:i'),
+            'days'     => $this->getDays(),
+            'enabled'  => $this->getEnabled(),
+            'runOnce'  => $this->getRepeat(),
+            'longPlay' => $this->getLong(),
+            'action'     => $this->getAction(),
+        );
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     public function getTime()
@@ -40,6 +71,26 @@ class Alarm implements \JsonSerializable
     public function setTime(\DateTime $time)
     {
         $this->time = $time;
+    }
+
+    public function getDays()
+    {
+        return $this->days;
+    }
+
+    public function setDays($days)
+    {
+        $this->days = $days;
+    }
+
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
     }
 
     public function getRepeat()
@@ -58,40 +109,6 @@ class Alarm implements \JsonSerializable
     public function setRepeat($once)
     {
         $this->repeat = $once;
-    }
-
-    public function getDays()
-    {
-        return $this->days;
-    }
-
-    public function setDays($days)
-    {
-        $this->days = $days;
-    }
-
-
-    public function jsonSerialize()
-    {
-        return array(
-            'id'       => $this->getName(),
-            'time'     => $this->getTime()->format('H:i'),
-            'days'     => $this->getDays(),
-            'enabled'  => $this->getEnabled(),
-            'runOnce'  => $this->getRepeat(),
-            'longPlay' => $this->getLong(),
-            'task'     => $this->getAction(),
-        );
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
     }
 
     public function getLong()

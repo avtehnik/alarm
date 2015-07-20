@@ -13,9 +13,4 @@ parameters:
 
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
-
-    node_path: /usr/local/bin/node
-    node_modules: [%kernel.root_dir%/../node_modules]
-    uglifycss_path: %kernel.root_dir%/../node_modules/.bin/uglifycss
-    uglifyjs_path: %kernel.root_dir%/../node_modules/.bin/uglifyjs
-    api_visualizer_url: 'http://api-visualizer.appshed.com/'
+    alarms_path: '/tmp/alarms/'

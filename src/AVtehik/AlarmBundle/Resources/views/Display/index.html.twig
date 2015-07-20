@@ -19,8 +19,7 @@
             <td>{{ alarm.time | timeLeft }}</td>
             <td>{{ alarm.action }}</td>
 
-
-            <td><a href="{{ path('edit_alarm',{'id':key}) }}">Edit</a></td>
+            <td><a href="{{ path('edit_alarm',{'id':alarm.id }) }}">Edit</a></td>
         </tr>
     {% endfor %}
 </table>

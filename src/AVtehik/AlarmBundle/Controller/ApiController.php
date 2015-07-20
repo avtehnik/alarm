@@ -5,42 +5,46 @@ namespace AVtehik\AlarmBundle\Controller;
 use AVtehik\AlarmBundle\Entity\Alarm;
 use AVtehik\AlarmBundle\Form\AlarmType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Validator\Constraints\DateTime;
 
-
-class DisplayController extends Controller
+/**
+ * @Route("/api")
+ */
+class ApiController extends Controller
 {
     /**
-     * @Route("/",name="alarms_list")
+     * @Route("/",name="api_alarms_list")
      * @Template()
      */
     public function indexAction()
     {
         $alarms = $this->get('a_vtehik_alarm.alarm_manager')->getAlarms();
 
-        return ['alarms' => $alarms];
+        return new JsonResponse(['alarms' => $alarms]);
     }
 
     /**
-     * @Route("/add", name="add_alarm")
+     * @Route("/add", name="api_add_alarm")
      * @Template()
      */
     public function addAction()
     {
-        $alarm  = new Alarm();
+        $alarm = new Alarm();
         $alarm->setTime(new \DateTime());
-        $form  = $this->createForm(new AlarmType(), $alarm, [
+        $form = $this->createForm(new AlarmType(), $alarm, [
             'action' => $this->generateUrl('save_alarm', ['id' => 'new']),
             'method' => 'POST',
         ]);
+
         return ['form' => $form->createView()];
     }
 
     /**
-     * @Route("/edit/{id}", name="edit_alarm")
+     * @Route("/edit/{id}", name="api_edit_alarm")
      * @Template()
      */
     public function editAction($id)
@@ -50,12 +54,13 @@ class DisplayController extends Controller
             'action' => $this->generateUrl('save_alarm', ['id' => $id]),
             'method' => 'POST',
         ]);
-        return ['form' => $form->createView(), 'deleteForm'=>$this->createDeleteForm($id)];
+
+        return ['form' => $form->createView(), 'deleteForm' => $this->createDeleteForm($id)];
     }
 
 
     /**
-     * @Route("/save/{id}", name="save_alarm")
+     * @Route("/save/{id}", name="api_save_alarm")
      * @Template()
      * @Method("POST")
      */
@@ -67,7 +72,7 @@ class DisplayController extends Controller
         $manager = $this->get('a_vtehik_alarm.alarm_manager');
 
         if ($id == 'new') {
-            $id = time();
+            $id    = time();
             $alarm = new Alarm();
         } else {
             $alarm = $manager->getAlarm($id);
@@ -79,11 +84,27 @@ class DisplayController extends Controller
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $manager->saveAlarm($alarm, $id);
+
                 return $this->redirect($this->generateUrl('alarms_list'));
             }
         }
 
         return ['form' => $form->createView()];
+    }
+
+
+    /**
+     * @Route("/delete/{id}", name="api_delete_alarm")
+     * @Template()
+     * @Method("DELETE")
+     */
+
+    public function deleteAction($id)
+    {
+        $this->get('a_vtehik_alarm.alarm_manager')->deleteAlarm($id);
+
+        return $this->redirect($this->generateUrl('alarms_list'));
+
     }
 
 
@@ -95,20 +116,6 @@ class DisplayController extends Controller
                     ->add('submit', 'submit', ['label' => 'Delete'])
                     ->getForm()
                     ->createView();
-    }
-
-
-    /**
-     * @Route("/delete/{id}", name="delete_alarm")
-     * @Template()
-     * @Method("DELETE")
-     */
-
-    public function deleteAction($id)
-    {
-       $this->get('a_vtehik_alarm.alarm_manager')->deleteAlarm($id);
-       return $this->redirect($this->generateUrl('alarms_list'));
-
     }
 
 
