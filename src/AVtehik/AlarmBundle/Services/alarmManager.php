@@ -4,7 +4,6 @@
 namespace AVtehik\AlarmBundle\Services;
 
 use AVtehik\AlarmBundle\Entity\Alarm;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 class AlarmManager
 {
