@@ -28,8 +28,6 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
-    form:
-        resources: [ "::form_bootstrap3.html.twig" ]
 
 # Doctrine Configuration
 doctrine:
