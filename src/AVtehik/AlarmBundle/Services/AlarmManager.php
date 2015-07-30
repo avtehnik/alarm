@@ -82,7 +82,7 @@ class AlarmManager
             } else {
                 if ($alarm->getRepeat()) {
                     $alarm->setEnabled(false);
-                    $this->saveAlarm($alarm);
+                    $this->saveAlarm($alarm, $alarm->getId());
                 }
                 return true;
             }
