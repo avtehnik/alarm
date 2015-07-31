@@ -80,7 +80,7 @@ class AlarmManager
             if (count($alarm->getDays()) && !in_array($this->currentDate->format('D'), $alarm->getDays())) {
                 return false;
             } else {
-                if ($alarm->getRepeat()) {
+                if (!$alarm->getRepeat()) {
                     $alarm->setEnabled(false);
                     $this->saveAlarm($alarm, $alarm->getId());
                 }
